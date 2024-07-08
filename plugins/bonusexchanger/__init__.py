@@ -1,7 +1,7 @@
 import threading
 from typing import List, Tuple, Dict, Any
 
-from app.db.transferhistory_oper import TransferHistoryOper
+from app.helper.sites import SitesHelper
 from app.log import logger
 from app.plugins import _PluginBase
 
@@ -15,7 +15,7 @@ class BonusExchanger(_PluginBase):
     # 插件图标
     plugin_icon = "BonusExchanger.png"
     # 插件版本
-    plugin_version = "0.1"
+    plugin_version = "0.1.1"
     # 插件作者
     plugin_author = "anxinJ"
     # 作者主页
@@ -25,7 +25,7 @@ class BonusExchanger(_PluginBase):
     # 加载顺序
     plugin_order = 0
     # 可使用的用户级别
-    auth_level = 1
+    auth_level = 2
 
     # preivate property
     exchange_sites = ""
@@ -34,11 +34,9 @@ class BonusExchanger(_PluginBase):
     _enabled = False
     _notify = False
     _onlyonce = False
-    _observer = []
 
     def init_plugin(self, config: dict = None):
         logger.info(f"Hello, RemoveLink! config {config}")
-        self._transferhistory = TransferHistoryOper()
         if config:
             self._enabled = config.get("enabled")
             self._notify = config.get("notify")
@@ -211,3 +209,11 @@ class BonusExchanger(_PluginBase):
     def get_page(self) -> List[dict]:
         pass
 
+    def stop_service(self):
+        """
+        退出插件
+        """
+        try:
+            self._enabled = False
+        except Exception as e:
+            print(str(e))

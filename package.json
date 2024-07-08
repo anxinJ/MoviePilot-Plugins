@@ -781,10 +781,10 @@
         "name": "茉莉兑换器",
         "description": "兑换上传、下载...",
         "labels": "站点",
-        "version": "0.1",
+        "version": "0.1.1",
         "icon": "BonusExchanger.png",
         "author": "anxinJ",
-        "level": 1,
+        "level": 2,
         "history": {
             "v0.1": "初始化表单"
         }
