@@ -15,7 +15,7 @@ class BonusExchanger(_PluginBase):
     # 插件图标
     plugin_icon = "BonusExchanger.png"
     # 插件版本
-    plugin_version = "0.1.3"
+    plugin_version = "0.1.4"
     # 插件作者
     plugin_author = "anxinJ"
     # 作者主页
@@ -48,7 +48,7 @@ class BonusExchanger(_PluginBase):
 
         if self._enabled:
             # 读取兑换站点
-            exchange_sites = self.exchange_sites.split("\n")
+            exchange_sites = self.exchange_sites
             logger.info(f"兑换站点：{exchange_sites}")
             logger.info(f"兑换类型：{self.exchange_type}")
             logger.info(f"请求频率：{self.request_frequence}")
