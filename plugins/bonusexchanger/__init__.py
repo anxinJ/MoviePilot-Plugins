@@ -15,7 +15,7 @@ class BonusExchanger(_PluginBase):
     # 插件图标
     plugin_icon = "BonusExchanger.png"
     # 插件版本
-    plugin_version = "0.1.2"
+    plugin_version = "0.1.3"
     # 插件作者
     plugin_author = "anxinJ"
     # 作者主页
@@ -28,19 +28,20 @@ class BonusExchanger(_PluginBase):
     auth_level = 2
 
     # preivate property
+    # 私有属性
+    siteshelper = None
     exchange_sites = ""
     exchange_type = ""
     request_frequence = ""
     _enabled = False
     _notify = False
-    _onlyonce = False
 
     def init_plugin(self, config: dict = None):
         logger.info(f"Hello, BonusExchanger! config {config}")
+        self.siteshelper = SitesHelper()
         if config:
             self._enabled = config.get("enabled")
             self._notify = config.get("notify")
-            self._onlyonce = config.get("onlyonce")
             self.exchange_sites = config.get("exchange_sites")
             self.exchange_type = config.get("exchange_type")
             self.request_frequence = config.get("request_frequence")
@@ -51,21 +52,10 @@ class BonusExchanger(_PluginBase):
             logger.info(f"兑换站点：{exchange_sites}")
             logger.info(f"兑换类型：{self.exchange_type}")
             logger.info(f"请求频率：{self.request_frequence}")
+            # 自动关闭插件
+            self._enabled = False
             if not exchange_sites:
                 return
-
-        if self._onlyonce:
-            logger.info(f"茉莉兑换服务启动，立即运行一次")
-            # 关闭一次性开关
-            self._onlyonce = False
-            self.update_config({
-                "enabled": self._enabled,
-                "notify": self._notify,
-                "onlyonce": False,
-                "exchange_sites": self.exchange_sites,
-                "exchange_type": self.exchange_type,
-                "request_frequence": self.request_frequence
-            })
 
     def __update_config(self):
         """
@@ -75,7 +65,6 @@ class BonusExchanger(_PluginBase):
             {
                 "enabled": self._enabled,
                 "notify": self._notify,
-                "onlyonce": self._onlyonce,
                 "exchange_sites": self.exchange_sites,
                 "exchange_type": self.exchange_type,
                 "request_frequence": self.request_frequence
@@ -93,8 +82,8 @@ class BonusExchanger(_PluginBase):
         pass
 
     def get_form(self) -> Tuple[List[dict], Dict[str, Any]]:
-        # site_options = [{"title": site.get("name"), "value": site.get("id")}
-        #                 for site in self.siteshelper.get_indexers()]
+        site_options = [{"title": site.get("name"), "value": site.get("id")}
+                        for site in self.siteshelper.get_indexers()]
         return [
             {
                 "component": "VForm",
@@ -127,22 +116,6 @@ class BonusExchanger(_PluginBase):
                                         },
                                     }
                                 ],
-                            },
-                            {
-                                'component': 'VCol',
-                                'props': {
-                                    'cols': 12,
-                                    'md': 4
-                                },
-                                'content': [
-                                    {
-                                        'component': 'VSwitch',
-                                        'props': {
-                                            'model': 'onlyonce',
-                                            'label': '立即运行一次',
-                                        }
-                                    }
-                                ]
                             }
                         ],
                     },
@@ -163,8 +136,7 @@ class BonusExchanger(_PluginBase):
                                             'clearable': True,
                                             'model': 'exchange_sites',
                                             'label': '兑换站点',
-                                            # 'items': site_options
-                                            'items': ['a']
+                                            'items': site_options
                                         }
                                     }
                                 ]
@@ -212,7 +184,6 @@ class BonusExchanger(_PluginBase):
             }
         ], {
             "enabled": False,
-            "onlyonce": False,
             "notify": False,
             "exchange_sites": "",
             "exchange_type": "upload",
@@ -226,7 +197,4 @@ class BonusExchanger(_PluginBase):
         """
         退出插件
         """
-        try:
-            self._enabled = False
-        except Exception as e:
-            print(str(e))
+        pass
