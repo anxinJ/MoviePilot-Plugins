@@ -786,6 +786,7 @@
         "author": "anxinJ",
         "level": 2,
         "history": {
+            "v0.1.1": "修复bug",
             "v0.1": "初始化表单"
         }
     }
