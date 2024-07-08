@@ -15,7 +15,7 @@ class BonusExchanger(_PluginBase):
     # 插件图标
     plugin_icon = "BonusExchanger.png"
     # 插件版本
-    plugin_version = "0.1.1"
+    plugin_version = "0.1.2"
     # 插件作者
     plugin_author = "anxinJ"
     # 作者主页
@@ -36,7 +36,7 @@ class BonusExchanger(_PluginBase):
     _onlyonce = False
 
     def init_plugin(self, config: dict = None):
-        logger.info(f"Hello, RemoveLink! config {config}")
+        logger.info(f"Hello, BonusExchanger! config {config}")
         if config:
             self._enabled = config.get("enabled")
             self._notify = config.get("notify")
@@ -54,6 +54,18 @@ class BonusExchanger(_PluginBase):
             if not exchange_sites:
                 return
 
+        if self._onlyonce:
+            logger.info(f"茉莉兑换服务启动，立即运行一次")
+            # 关闭一次性开关
+            self._onlyonce = False
+            self.update_config({
+                "enabled": self._enabled,
+                "notify": self._notify,
+                "onlyonce": False,
+                "exchange_sites": self.exchange_sites,
+                "exchange_type": self.exchange_type,
+                "request_frequence": self.request_frequence
+            })
 
     def __update_config(self):
         """
@@ -81,8 +93,8 @@ class BonusExchanger(_PluginBase):
         pass
 
     def get_form(self) -> Tuple[List[dict], Dict[str, Any]]:
-        site_options = [{"title": site.get("name"), "value": site.get("id")}
-                        for site in self.siteshelper.get_indexers()]
+        # site_options = [{"title": site.get("name"), "value": site.get("id")}
+        #                 for site in self.siteshelper.get_indexers()]
         return [
             {
                 "component": "VForm",
@@ -151,7 +163,8 @@ class BonusExchanger(_PluginBase):
                                             'clearable': True,
                                             'model': 'exchange_sites',
                                             'label': '兑换站点',
-                                            'items': site_options
+                                            # 'items': site_options
+                                            'items': ['a']
                                         }
                                     }
                                 ]
