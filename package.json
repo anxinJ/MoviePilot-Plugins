@@ -776,5 +776,17 @@
             "v1.1": "支持将极影视评分修改为豆瓣评分",
             "v1.0": "同步极影视在看/已看状态到豆瓣"
         }
+    },
+    "BonusExchanger": {
+        "name": "茉莉兑换器",
+        "description": "兑换上传、下载...",
+        "labels": "站点",
+        "version": "0.1",
+        "icon": "BonusExchanger.png",
+        "author": "anxinJ",
+        "level": 1,
+        "history": {
+            "v0.1": "初始化表单"
+        }
     }
 }
